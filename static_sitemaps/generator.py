@@ -107,9 +107,8 @@ class SitemapGenerator(object):
         output = loader.render_to_string(conf.INDEX_TEMPLATE, {'sitemaps': parts})
         self._write(path, output)
 
-        with self.storage.open(path) as sitemap_index:
-            if self.get_hash(sitemap_index.read()) != old_index_md5:
-                self.has_changes = True
+        if self.get_hash(output) != old_index_md5:
+            self.has_changes = True
 
         if conf.PING_GOOGLE and self.has_changes:
             try:
@@ -159,9 +158,8 @@ class SitemapGenerator(object):
         output = smart_str(loader.render_to_string(template, {'urlset': urls}))
         self._write(path, output)
 
-        with self.storage.open(path) as sitemap_page:
-            if old_page_md5 != self.get_hash(sitemap_page.read()):
-                self.has_changes = True
+        if old_page_md5 != self.get_hash(output):
+            self.has_changes = True
 
         if conf.USE_GZIP:
             if conf.GZIP_METHOD not in ['python', 'system', ]:
