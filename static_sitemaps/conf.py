@@ -73,6 +73,8 @@ def get_url():
         # current domain so we append STATIC_URL.
         from django.contrib.sites.models import Site
         _url = Site.objects.get_current().domain + settings.STATIC_URL
+    elif settings.STATIC_URL.startswith('//'):
+        _url = 'http:' + settings.STATIC_URL
     else:
         # If STATIC_URL starts with protocol, it is probably a special domain
         # for static files and we stick to it.
